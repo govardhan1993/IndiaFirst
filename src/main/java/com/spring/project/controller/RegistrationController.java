@@ -19,7 +19,7 @@ public class RegistrationController {
 	
 	@PostMapping("/save")
 	public User createUser(@RequestBody User user) throws Exception {
-		
+		/*
 		String tempEmailId=user.getEmail();
 		if(tempEmailId!=null && !"".equals(tempEmailId)) {
 		User users=	userServices.featchUserByEmail(tempEmailId);
@@ -27,7 +27,7 @@ public class RegistrationController {
 		{
 			throw new UserAlredyFoundException("User With this id "+tempEmailId+"is alredy exits");
 		}
-		}
+		}*/
 		User users=null;
 		users = userServices.saveUser(user);
 		return users;
