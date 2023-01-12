@@ -7,5 +7,7 @@ import com.spring.project.model.User;
 public interface UserServices {
 	
 	public User saveUser(User user);
+	
+	public User featchUserByEmail(String email);
 
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.project.exception.UserAlredyFoundException;
 import com.spring.project.model.User;
 import com.spring.project.service.UserServices;
 
@@ -17,9 +18,19 @@ public class RegistrationController {
 	private UserServices userServices;
 	
 	@PostMapping("/save")
-	public ResponseEntity<User> createUser(@RequestBody User user) throws Exception {
-		User users = userServices.saveUser(user);
-		return ResponseEntity.ok().body(users);
+	public User createUser(@RequestBody User user) throws Exception {
+		
+		String tempEmailId=user.getEmail();
+		if(tempEmailId!=null && !"".equals(tempEmailId)) {
+		User users=	userServices.featchUserByEmail(tempEmailId);
+		if(users!=null)
+		{
+			throw new UserAlredyFoundException("User With this id "+tempEmailId+"is alredy exits");
+		}
+		}
+		User users=null;
+		users = userServices.saveUser(user);
+		return users;
 	}
 
 }

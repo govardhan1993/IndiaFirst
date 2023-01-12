@@ -19,4 +19,9 @@ public class UserServiceImpl implements UserServices {
 			
 	}
 
+	@Override
+	public User featchUserByEmail(String email) {
+		return userRepository.findByEmailId(email);
+	}
+
 }
