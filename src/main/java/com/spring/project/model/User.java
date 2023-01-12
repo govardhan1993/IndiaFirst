@@ -1,14 +1,22 @@
 package com.spring.project.model;
 
+import java.util.Collection;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="user")
+@Table(name="user", uniqueConstraints = @UniqueConstraint(columnNames="email"))
 public class User {
 	
 	@Id
@@ -26,17 +34,24 @@ public class User {
 	private String email;
 	@Column(name="mobile")
 	private String mobile;
-	@Column(name="status")
-	private boolean enable=true;
 	
-	private String profile;
-	
-	
-	public String getProfile() {
-		return profile;
-	}
-	public void setProfile(String profile) {
-		this.profile = profile;
+	@ManyToMany(fetch = FetchType.EAGER , cascade = CascadeType.ALL)
+	@JoinTable(
+			name="users_roles",
+			joinColumns = @JoinColumn(name="user_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name="roles_id", referencedColumnName = "id")
+			)
+	private Collection<Role> roles;
+	public User(String username, String password, String firstname, String lastname, String email, String mobile,
+			Collection<Role> roles) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.email = email;
+		this.mobile = mobile;
+		this.roles = roles;
 	}
 	public Long getId() {
 		return id;
@@ -80,31 +95,15 @@ public class User {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	public boolean isEnable() {
-		return enable;
+	public Collection<Role> getRoles() {
+		return roles;
 	}
-	public void setEnable(boolean enable) {
-		this.enable = enable;
-	}
-	public User() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public User(Long id, String username, String password, String firstname, String lastname, String email,
-			String mobile, boolean enable,String profile) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.firstname = firstname;
-		this.lastname = lastname;
-		this.email = email;
-		this.mobile = mobile;
-		this.enable = enable;
-		this.profile=profile;
+	public void setRoles(Collection<Role> roles) {
+		this.roles = roles;
 	}
 	
 	
 	
-
 }
+	
+	
